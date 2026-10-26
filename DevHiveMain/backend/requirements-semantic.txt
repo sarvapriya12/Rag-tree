@@ -1,0 +1,2 @@
+-r requirements-rag.txt
+sentence-transformers>=3,<6

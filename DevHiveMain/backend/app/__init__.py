@@ -1,0 +1,1 @@
+"""DevHive modular monolith backend."""

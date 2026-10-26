@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Only browser sessions live here. FastAPI owns projects, roles, repos and memory.
+model BrowserSession {
+  id              String   @id // SHA-256 of random browser cookie; raw cookie never stored.
+  backendUserId   String
+  encryptedToken  String
+  expiresAt       DateTime
+  createdAt       DateTime @default(now())
+
+  @@index([backendUserId])
+  @@index([expiresAt])
+}

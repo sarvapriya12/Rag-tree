@@ -1,0 +1,4 @@
+-r requirements.txt
+psycopg[binary]>=3.2,<4
+numpy>=2,<3
+turbovec>=1.1.2,<2

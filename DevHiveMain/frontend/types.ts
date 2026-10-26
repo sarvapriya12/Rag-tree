@@ -1,0 +1,64 @@
+export type User = { id: string; email: string; name: string; github_connected: boolean; github_login?: string | null };
+export type Project = { id: string; name: string; owner_id: string; is_owner: boolean; permissions?: string[] };
+export type Repository = { id: string; project_id: string; github_owner: string; github_name: string;
+  full_name: string; html_url: string;
+  default_branch: string; read_only: boolean; is_owner?: boolean; permissions?: string[] };
+export type Role = { id: string; name: string; color: string; position: number; permissions: string[] };
+export type Member = { user_id: string; email: string; name: string; role_id: string | null;
+  role_name: string; is_owner: boolean };
+export type Invitation = { id: string; email: string; role_id: string; created_at: string };
+export type GitHubRepository = { owner: string; name: string; full_name: string; private: boolean;
+  html_url: string; can_push: boolean };
+export type Commit = { id: string; sha: string; branch: string; author: string; committed_at: string | null;
+  message: string; files: { name: string; status: string; additions: number; deletions: number }[] };
+export type Citation = { id: number; sha: string; branch: string; kind: string; message: string; path?: string | null; excerpt: string;
+  source_label?: string; symbol?: string | null; start_line?: number | null; end_line?: number | null;
+  author?: string; committed_at?: string | null };
+export type FileChange = { sha: string; author: string; message: string; committed_at: string | null;
+  additions?: number; deletions?: number; status?: string; url?: string | null };
+export type FileContributor = { person: string; commits: number; last_at?: string | null };
+export type FileThought = { id?: string; author: string; body: string; kind?: string; source_label?: string };
+/** One matched piece of code with its provenance: where it is, who changed it, and what it touches. */
+export type FileInsight = { path: string; symbol?: string | null; start_line?: number | null; end_line?: number | null;
+  code: string; sha: string; github_url: string; source_label?: string; history: FileChange[];
+  contributors: FileContributor[]; thoughts: FileThought[]; imports: string[]; used_by: string[];
+  /** Retrieval details: relevance 0-1, the folder it is grouped under, and how the window was built. */
+  symbols?: string[]; score?: number; group?: string; sections?: number; seeds?: number;
+  duplicates?: string[]; focus_start?: number; focus_end?: number };
+export type Snippet = { path: string; code: string; start_line?: number | null; end_line?: number | null; kind: string;
+  sha?: string; source_label?: string };
+export type TeamMember = { person: string; commits: number; first_at: string | null; last_at: string | null;
+  files: string[]; recent: { sha: string; message: string; committed_at: string | null }[] };
+export type LlmStatus = "ok" | "partial" | "not_configured" | "no_safe_evidence" | "unavailable" | "rate_limited";
+/** How much work a question gets: more sections retrieved, wider windows, more folders, longer answers. */
+export type Depth = "low" | "medium" | "high" | "very_high";
+export type ScopeFile = { path: string; chunks: number; lines: number };
+export type ScopeTreeData = { branch: string; sha: string | null; indexed_at: string | null; profile_ready: boolean;
+  total_files: number; total_chunks: number; files: ScopeFile[] };
+/** Every folder in scope is covered at every depth; depth changes how much code is read per folder. */
+export type RetrievalStats = { candidates: number; ranked: number; windows: number; folders_in_scope: number;
+  folders_covered: number; folders_with_code?: number; avg_excerpt_chars?: number; duplicates_collapsed: number;
+  evidence_chars?: number; llm_calls?: number; map_reduce?: boolean };
+export type OutlineFolder = { path: string; files: number; chunks: number; readme: string;
+  symbols?: string[]; relevance?: number; excerpts?: boolean };
+export type Outline = { folders: OutlineFolder[]; text: string; source_label?: string };
+/** Very high only: the summary of one batch of folders, written before the final synthesis. */
+export type GroupNote = { key: string; folders: string[]; labels: string[]; summary: string };
+export type Answer = { answer: string; tool_used: "code_lookup" | "memory_search" | "inspect_file"; branch?: string;
+  citations: Citation[]; snippets: Snippet[]; files?: FileInsight[]; team?: TeamMember[]; team_label?: string;
+  thoughts?: FileThought[]; imports?: string[]; used_by?: string[]; llm_status?: LlmStatus;
+  depth?: Depth; scope?: string[]; retrieval?: RetrievalStats; outline?: Outline | null; groups?: GroupNote[] };
+export type ChatJob = { job_id: string; status: "queued" | "running" | "done" | "error" | "cancelled";
+  stage: string; step: number; total: number; message: string; elapsed: number; result?: Answer; error?: string };
+export type LlmSettings = { provider: "groq"; model: string; configured: boolean; shared?: boolean; active?: boolean };
+export type Override = { id: string; role_id: string; pattern: string; allow: string[]; deny: string[] };
+export type Audit = { id: string; action: string; target: string; allowed: boolean; actor_id: string;
+  created_at: string };
+export type GitHubActivityEvent = { id: string; kind: string; branch: string; actor: string;
+  created_at: string | null; detail: string; sha?: string | null };
+export type GitHubCommit = { sha: string; branch: string; author: string; committer: string;
+  committed_at: string | null; message: string; url?: string };
+export type Contributor = { person: string; commits: number; last_at: string | null;
+  recent: { sha: string; message: string; files: string[] }[] };
+export type PullRequest = { number: number; title: string; head: string; base: string;
+  author: string; url?: string; created_at?: string; can_merge: boolean };

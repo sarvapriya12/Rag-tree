@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.sqlite3-*
+.env
+.env.local
+.venv/
+.pytest_cache/
+# Local databases (user data, encrypted tokens), caches and build output
+*.db
+*.db-journal
+.cache/
+node_modules/
+.next/
+tsconfig.tsbuildinfo
+# Large archives (old shared snapshot that bundles model weights)
+*.zip
